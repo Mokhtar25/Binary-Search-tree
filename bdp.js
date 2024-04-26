@@ -2,7 +2,7 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const trr = Tree(arr);
 
-trr.root = trr.del(6345);
+trr.root = trr.del(trr.root, 6345);
 
 trr.print();
 
@@ -18,36 +18,35 @@ function Tree(array) {
     if (roots.right !== null) print(roots.right);
   };
 
-  const MinValue = (head) => {
-    let min = head.value;
-    while (head.left) {
-      min = head.left.value;
-      head = head.left;
+  const MinValue = (node) => {
+    while (node.left !== null) {
+      node = node.left;
     }
-    return min;
+    return node.val;
   };
   const del = (roots, value) => {
     if (roots === null) return roots;
 
-    if (roots.value > value) {
+    if (roots.value < value) {
       roots.right = del(roots.right, value);
-    } else if (roots.value < value) {
+    } else if (roots.value > value) {
       roots.left = del(roots.left, value);
     } else {
       if (roots.left === null) return roots.right;
       else if (roots.right === null) return roots.left;
 
-      roots.value = MinValue(roots.right);
-      roots.right = del(roots.right, roots.value);
-      return roots;
+      const min = MinValue(roots.right);
+      roots.value = min;
+      roots.right = del(roots.right, min);
     }
+    return roots;
   };
 
   return { root, print, del };
 }
 
 function MakeNode(data) {
-  const value = data;
+  let value = data;
   let left = null;
   let right = null;
   return { value, left, right };
