@@ -6,8 +6,13 @@ trr.setroot(trr.del(trr.getroot(), 23));
 
 trr.setroot(trr.insert(trr.root, 23123213));
 trr.setroot(trr.insert(trr.getroot(), 7));
-console.log(trr.find(8));
-trr.print();
+// console.log(trr.find(8));
+console.log(
+  trr.getarry((e) => {
+    console.log(e);
+  }),
+);
+// trr.print();
 
 function Tree(array) {
   let root = BulidTree(array);
@@ -25,6 +30,24 @@ function Tree(array) {
     if (roots.right !== null) print(roots.right);
   };
 
+  const getarry = (callback = null) => {
+    const arr = [];
+
+    const prints = (roots = root) => {
+      if (roots === null) {
+        return;
+      }
+      if (roots.left !== null) prints(roots.left);
+      arr.push(roots.value);
+      if (roots.right !== null) prints(roots.right);
+    };
+    prints();
+    if (callback !== null) {
+      arr.forEach((e) => callback(e));
+      return;
+    }
+    return arr;
+  };
   const find = (value) => {
     return finds(root, value);
     function finds(root, value) {
@@ -95,7 +118,7 @@ function Tree(array) {
     return roots;
   };
 
-  return { root, find, setroot, print, getroot, del, insert };
+  return { root, getarry, find, setroot, print, getroot, del, insert };
 }
 
 function MakeNode(data) {
