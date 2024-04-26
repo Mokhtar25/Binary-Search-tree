@@ -2,13 +2,19 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const trr = Tree(arr);
 
-trr.root = trr.del(trr.root, 6345);
+trr.setroot(trr.del(trr.getroot(), 23));
 
+trr.setroot(trr.insert(trr.root, 23123213));
+trr.setroot(trr.insert(trr.getroot(), 7));
 trr.print();
 
 function Tree(array) {
-  const root = BulidTree(array);
+  let root = BulidTree(array);
 
+  const setroot = (roots) => {
+    if (typeof roots !== "object") return false;
+    root = roots;
+  };
   const print = (roots = root) => {
     if (roots === null) {
       return;
@@ -18,14 +24,46 @@ function Tree(array) {
     if (roots.right !== null) print(roots.right);
   };
 
-  const MinValue = (node) => {
-    while (node.left !== null) {
-      node = node.left;
+  const insert = (roots, value) => {
+    if (checkdup(roots, value) === true) return roots;
+    return insertrec(roots, value);
+  };
+  const insertrec = (roots, value) => {
+    if (roots === null) {
+      const newnode = MakeNode(value);
+      return newnode;
     }
-    return node.val;
+
+    if (roots.value > value) roots.left = insert(roots.left, value);
+    else if (roots.value < value) roots.right = insert(roots.right, value);
+
+    return roots;
+  };
+
+  const checkdup = (roots = root, value) => {
+    if (roots === null || roots === undefined) {
+      return false;
+    }
+
+    if (roots.right !== null) if (checkdup(roots.right, value)) return true;
+
+    if (roots.value === value) return true;
+    if (roots.left !== null) if (checkdup(roots.left, value)) return true;
+
+    return false;
+  };
+  const getroot = () => {
+    return root;
   };
   const del = (roots, value) => {
     if (roots === null) return roots;
+
+    const MinValue = (node) => {
+      while (node.left !== null) {
+        node = node.left;
+      }
+      return node.val;
+    };
 
     if (roots.value < value) {
       roots.right = del(roots.right, value);
@@ -35,14 +73,13 @@ function Tree(array) {
       if (roots.left === null) return roots.right;
       else if (roots.right === null) return roots.left;
 
-      const min = MinValue(roots.right);
-      roots.value = min;
-      roots.right = del(roots.right, min);
+      roots.value = MinValue(roots.right);
+      roots.right = del(roots.right, roots.value);
     }
     return roots;
   };
 
-  return { root, print, del };
+  return { root, setroot, print, getroot, del, insert };
 }
 
 function MakeNode(data) {
