@@ -6,6 +6,7 @@ trr.setroot(trr.del(trr.getroot(), 23));
 
 trr.setroot(trr.insert(trr.root, 23123213));
 trr.setroot(trr.insert(trr.getroot(), 7));
+console.log(trr.find(8));
 trr.print();
 
 function Tree(array) {
@@ -24,6 +25,21 @@ function Tree(array) {
     if (roots.right !== null) print(roots.right);
   };
 
+  const find = (value) => {
+    return finds(root, value);
+    function finds(root, value) {
+      if (root === null) {
+        return false;
+      }
+      if (root.value === value) {
+        return root;
+      } else if (root.value > value) {
+        return finds(root.left, value);
+      } else {
+        return finds(root.right, value);
+      }
+    }
+  };
   const insert = (roots, value) => {
     if (checkdup(roots, value) === true) return roots;
     return insertrec(roots, value);
@@ -79,7 +95,7 @@ function Tree(array) {
     return roots;
   };
 
-  return { root, setroot, print, getroot, del, insert };
+  return { root, find, setroot, print, getroot, del, insert };
 }
 
 function MakeNode(data) {
