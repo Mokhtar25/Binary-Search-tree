@@ -2,14 +2,15 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const trr = Tree(arr);
 
-// trr.setroot(trr.del(trr.getroot(), 23));
+trr.setroot(trr.del(trr.getroot(), 23));
 
-// trr.setroot(trr.insert(trr.root, 23123213));
-// trr.setroot(trr.insert(trr.getroot(), 7));
+trr.setroot(trr.insert(trr.root, 23123213));
+trr.setroot(trr.insert(trr.getroot(), 7));
 // console.log(trr.find(8));
-trr.print();
+// console.log(trr.isBal());
 // trr.getNodeDepth(8);
 console.log(trr.getNodeHeigt(8));
+console.log(trr.isBal());
 
 function Tree(array) {
   let root = BulidTree(array);
@@ -26,21 +27,42 @@ function Tree(array) {
     console.log(roots.value);
     if (roots.right !== null) print(roots.right);
   };
+  const isBal = (roots = root) => {
+    // Base condition
+    if (roots === null) return true;
+
+    // for left and right subtree height
+    let lh = height(roots.left);
+    let rh = height(roots.right);
+
+    // allowed values for (lh - rh) are 1, -1, 0
+    if (
+      Math.abs(lh - rh) <= 1 &&
+      isBal(roots.left) === true &&
+      isBal(roots.right) === true
+    )
+      return true;
+
+    // if we reach here means tree is not
+    // height-balanced tree
+    return false;
+  };
+  const height = (root) => {
+    // base condition when binary tree is empty
+    if (root == null) return 0;
+    return Math.max(height(root.left), height(root.right)) + 1;
+  };
 
   const getNodeHeigt = (num) => {
     const node = find(num);
+    return getpath(node);
+  };
+  const getpath = (root) => {
+    if (root === null) {
+      return 0;
+    }
 
-    console.log(node);
-    const getpath = (root, depth) => {
-      if (root === null) {
-        return depth;
-      }
-
-      const left = getpath(root.left, depth + 1);
-      const right = getpath(root.right, depth + 1);
-      return Math.max(left, right);
-    };
-    return getpath(node, 0);
+    return Math.max(getpath(root.left), getpath(root.right)) + 1;
   };
   const getNodeDepth = (num) => {
     const que = [root];
@@ -155,6 +177,7 @@ function Tree(array) {
   return {
     root,
     getarry,
+    isBal,
     find,
     getNodeDepth,
     getNodeHeigt,
