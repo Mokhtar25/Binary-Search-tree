@@ -2,17 +2,14 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const trr = Tree(arr);
 
-trr.setroot(trr.del(trr.getroot(), 23));
+// trr.setroot(trr.del(trr.getroot(), 23));
 
-trr.setroot(trr.insert(trr.root, 23123213));
-trr.setroot(trr.insert(trr.getroot(), 7));
+// trr.setroot(trr.insert(trr.root, 23123213));
+// trr.setroot(trr.insert(trr.getroot(), 7));
 // console.log(trr.find(8));
-console.log(
-  trr.getarry((e) => {
-    console.log(e);
-  }),
-);
-// trr.print();
+trr.print();
+// trr.getNodeDepth(8);
+console.log(trr.getNodeHeigt(8));
 
 function Tree(array) {
   let root = BulidTree(array);
@@ -30,6 +27,43 @@ function Tree(array) {
     if (roots.right !== null) print(roots.right);
   };
 
+  const getNodeHeigt = (num) => {
+    const node = find(num);
+
+    console.log(node);
+    const getpath = (root, depth) => {
+      if (root === null) {
+        return depth;
+      }
+
+      const left = getpath(root.left, depth + 1);
+      const right = getpath(root.right, depth + 1);
+      return Math.max(left, right);
+    };
+    return getpath(node, 0);
+  };
+  const getNodeDepth = (num) => {
+    const que = [root];
+
+    let found = false;
+    let h = 0;
+    while (que.length !== 0) {
+      const value = que.shift();
+      if (num === value.value) {
+        found = true;
+      }
+
+      if (value.left && num < value.value) {
+        que.push(value.left);
+        h++;
+      } else if (value.right && num > value.value) {
+        que.push(value.right);
+        h++;
+      }
+    }
+    if (found) console.log(h);
+    else console.log("-1");
+  };
   const getarry = (callback = null) => {
     const arr = [];
 
@@ -118,7 +152,18 @@ function Tree(array) {
     return roots;
   };
 
-  return { root, getarry, find, setroot, print, getroot, del, insert };
+  return {
+    root,
+    getarry,
+    find,
+    getNodeDepth,
+    getNodeHeigt,
+    setroot,
+    print,
+    getroot,
+    del,
+    insert,
+  };
 }
 
 function MakeNode(data) {
