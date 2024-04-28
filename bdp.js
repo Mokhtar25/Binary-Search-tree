@@ -9,9 +9,16 @@ trr.setroot(trr.insert(trr.getroot(), 7));
 // console.log(trr.find(8));
 // console.log(trr.isBal());
 // trr.getNodeDepth(8);
-console.log(trr.getNodeHeigt(8));
-console.log(trr.isBal());
+trr.print();
 
+console.log(trr.isBal());
+console.log(
+  "---------------------------------------------------------------------",
+);
+trr.rebal();
+
+console.log(trr.isBal());
+trr.print();
 function Tree(array) {
   let root = BulidTree(array);
 
@@ -27,6 +34,13 @@ function Tree(array) {
     console.log(roots.value);
     if (roots.right !== null) print(roots.right);
   };
+
+  const rebal = () => {
+    const items = getarry();
+    const newRoot = BulidTree(items);
+    setroot(newRoot);
+  };
+
   const isBal = (roots = root) => {
     // Base condition
     if (roots === null) return true;
@@ -182,6 +196,7 @@ function Tree(array) {
     getNodeDepth,
     getNodeHeigt,
     setroot,
+    rebal,
     print,
     getroot,
     del,
